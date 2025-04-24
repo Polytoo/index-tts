@@ -424,19 +424,11 @@ class IndexTTS:
         print(f">> [fast] batch_num: {all_batch_num} bucket_enable: {bucket_enable}")
         print(f">> [fast] RTF: {(end_time - start_time) / wav_length:.4f}")
 
-        # save audio
+        # 返回音频数据
         wav = wav.cpu() # to cpu
-        if output_path:
-            # 直接保存音频到指定路径中
-            os.makedirs(os.path.dirname(output_path),exist_ok=True)
-            torchaudio.save(output_path, wav.type(torch.int16), sampling_rate)
-            print(">> wav file saved to:", output_path)
-            return output_path
-        else:
-            # 返回以符合Gradio的格式要求
-            wav_data = wav.type(torch.int16)
-            wav_data = wav_data.numpy().T  
-            return (sampling_rate, wav_data)
+        wav_data = wav.type(torch.int16)
+        wav_data = wav_data.numpy().T  
+        return (sampling_rate, wav_data)
         
     
     
@@ -581,23 +573,11 @@ class IndexTTS:
         # torchaudio.save(output_path, wav.cpu().type(torch.int16), sampling_rate)
         # print(">> wav file saved to:", output_path)
         
-        # save audio
+        # 返回音频数据
         wav = wav.cpu() # to cpu
-        if output_path:
-            # 直接保存音频到指定路径中
-            if os.path.isfile(output_path):
-                os.remove(output_path)
-                print(">> remove old wav file:", output_path)
-            if os.path.dirname(output_path) != "":
-                os.makedirs(os.path.dirname(output_path),exist_ok=True)
-            torchaudio.save(output_path, wav.type(torch.int16), sampling_rate)
-            print(">> wav file saved to:", output_path)
-            return output_path
-        else:
-            # 返回以符合Gradio的格式要求
-            wav_data = wav.type(torch.int16)
-            wav_data = wav_data.numpy().T  
-            return (sampling_rate, wav_data)
+        wav_data = wav.type(torch.int16)
+        wav_data = wav_data.numpy().T  
+        return (sampling_rate, wav_data)
 
 
 if __name__ == "__main__":

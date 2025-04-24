@@ -27,16 +27,13 @@ os.makedirs("prompts",exist_ok=True)
 
 
 def gen_single(prompt, text, infer_mode, progress=gr.Progress()):
-    output_path = None
-    if not output_path:
-        output_path = os.path.join("outputs", f"spk_{int(time.time())}.wav")
     # set gradio progress
     tts.gr_progress = progress
     if infer_mode == "普通推理":
-        output = tts.infer(prompt, text, output_path) # 普通推理
+        sampling_rate, wav_data = tts.infer(prompt, text, None) # 普通推理
     else:
-        output = tts.infer_fast(prompt, text, output_path) # 批次推理
-    return gr.update(value=output,visible=True)
+        sampling_rate, wav_data = tts.infer_fast(prompt, text, None) # 批次推理
+    return (sampling_rate, wav_data)
 
 def update_prompt_audio():
     update_button = gr.update(interactive=True)
